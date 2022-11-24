@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='mujstyl.css') }}">
+    <title>Registrace</title>
+</head>
+<body class="container align-center">
+    <div class="form-group">
+    <form method="POST" id="form_messages">
+        <h3>Přidání žáka na loď</h3>
+        <label class="form-label" for="jmeno">
+            Krestni jmeno
+        </label>
+        <input class="form-control" type="text" id="jmeno" name="jmeno" required>
+        <label class="form-label" for="prijmeni">
+            Prijmeni
+        </label>
+        <input class="form-control" type="text" id="prijmeni" name="prijmeni" required>
+        <label class="form-label" for="nick">
+            Prezdivka
+        </label>
+        <input class="form-control" type="text" id="nick" name="nick" required>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" value="True" name="je_plavec" id="je_plavec">
+          <label class="form-label" for="je_plavec">
+            Plavec
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" value="False" name="je_plavec" id="je_plavec" checked="">
+          <label class="form-label" for="je_plavec">
+            Neplavec
+          </label>
+        </div>
+        <label class="form-label" for="kanoe_kamarad">
+            Kamarad na lod
+          </label>
+        <input class="form-control" type="text" id="kanoe_kamarad" name="kanoe_kamarad">
+        <div class="mt-2">
+        <input type="submit" class="btn btn-primary" />
+        <a href="{{url_for('index')}}" class="btn btn-secondary">zpet</a>
+      </div>
+      </form>
+
+     </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+          integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+          crossorigin="anonymous"></script>
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+
+        $(document).on('submit','#form_messages',function(e) {
+            e.preventDefault();
+
+            const regex = /^[a-zA-Z0-9]{2,20}$/gm;
+            let name = $("#nick").val();
+            let friend_name = $("#kanoe_kamarad").val();
+
+            if (!(name.match(regex))) {
+                alert('spatne zadane jmeno');
+            } else if (!(friend_name.match(regex)) && false || friend_name == null) {
+                alert('spatne zadane jmeno kamarada' );
+            }else {
+                fetch('http://localhost:8080/api/name/' + name)
+                    .then(res => {
+                        return res.json();
+                    })
+                    .then(data => {
+                        if (data.includes("False")){
+                            $.ajax({
+                                type: 'POST',
+                                url: "{{url_for('script')}}",//odeslani na URL kde je script
+                                data: {
+                                    nick: $("#nick").val(),
+                                    kanoe_kamarad: $("#kanoe_kamarad").val(),
+                                    je_plavec: $("#je_plavec").val(),
+                                    jmeno: $("#jmeno").val(),
+                                    prijmeni: $("#prijmeni").val()
+                                },
+                            })
+                                var element = document.getElementById("form_messages");
+                                element.classList.add("pulse1");
+                                setTimeout(function (){
+                                    element.classList.remove("pulse1");
+                                }, 4000);
+
+                        }else{
+                            var element2 = document.getElementById("form_messages");
+                                element2.classList.add("pulse2");
+                                setTimeout(function (){
+                                    alert("Uzivatel se stejnou prezdivkou jiz existuje");
+                                    element2.classList.remove("pulse2");
+                                }, 4000);
+                        }
+                    });
+            }
+        });
+    </script>
+
+</body>
+</html>
