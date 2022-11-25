@@ -8,8 +8,8 @@ app = Flask(__name__, static_url_path='/static', static_folder='static', templat
 Prep for sending mails
 app.config['MAIL_SERVER']='smtp.mailtrap.io'
 app.config['MAIL_PORT'] = 2525
-app.config['MAIL_USERNAME'] = '7076f64e887f14'
-app.config['MAIL_PASSWORD'] = 'dc92af1e281603'
+app.config['MAIL_USERNAME'] = 'xxx'
+app.config['MAIL_PASSWORD'] = 'xxx'
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 mail = Mail(app)
