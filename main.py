@@ -1,9 +1,19 @@
 from flask import Flask, render_template, request
+
+
 import json
 
 app = Flask(__name__, static_url_path='/static', static_folder='static', template_folder='templates')
-
-
+"""
+Prep for sending mails
+app.config['MAIL_SERVER']='smtp.mailtrap.io'
+app.config['MAIL_PORT'] = 2525
+app.config['MAIL_USERNAME'] = '7076f64e887f14'
+app.config['MAIL_PASSWORD'] = 'dc92af1e281603'
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+mail = Mail(app)
+"""
 def in_file(string):
     with open("static/users.json", "r") as fo:
         data = fo.read()
@@ -76,6 +86,13 @@ def feedback_script():
         fi.write(text + "\n")
     return render_template('feedback.html', zprava="Feedback uspesne ulozen"), 200
 
+"""
+Prep for sending mails
+@app.route('/send/mail', methods=['GET', 'POST'])
+def send_email():
+    msg = render_template('mail.html')
+    mail.send
 
+"""
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
